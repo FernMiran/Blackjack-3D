@@ -1,0 +1,193 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b157b4a3aeaa1854db22515d9d379e10, type: 3}
+  m_Name: Blackjack Theme Data
+  m_EditorClassIdentifier: 
+  _font: {fileID: 0}
+  _cards:
+  - Suit: 0
+    Rank: 1
+    Sprite: {fileID: 21300000, guid: 8dbe7e59e48747348928b3bb9ea2b8c3, type: 3}
+  - Suit: 0
+    Rank: 2
+    Sprite: {fileID: 21300000, guid: 4537f3ae809ba274da3665898cad73a9, type: 3}
+  - Suit: 0
+    Rank: 3
+    Sprite: {fileID: 21300000, guid: 0b541166fbbf2bf45917884eaf17b384, type: 3}
+  - Suit: 0
+    Rank: 4
+    Sprite: {fileID: 21300000, guid: bd4cfaa78a8d71b409dfae64a7d5fb61, type: 3}
+  - Suit: 0
+    Rank: 5
+    Sprite: {fileID: 21300000, guid: c2975bacaa2a437418b24c47fb9b8bbc, type: 3}
+  - Suit: 0
+    Rank: 6
+    Sprite: {fileID: 21300000, guid: f6fe09ccd36acf84ca0a4e436730bd22, type: 3}
+  - Suit: 0
+    Rank: 7
+    Sprite: {fileID: 21300000, guid: 27f062f536aa20c48b6b45535e430cb5, type: 3}
+  - Suit: 0
+    Rank: 8
+    Sprite: {fileID: 21300000, guid: b29f68920631bf045ac693c9e21965fd, type: 3}
+  - Suit: 0
+    Rank: 9
+    Sprite: {fileID: 21300000, guid: b4ed5a043fc9b9147864a46346ea5b5f, type: 3}
+  - Suit: 0
+    Rank: 10
+    Sprite: {fileID: 21300000, guid: 3c5bb61bf96d4514fbb07db95c8bd3ed, type: 3}
+  - Suit: 0
+    Rank: 11
+    Sprite: {fileID: 21300000, guid: 0f54ddcfb8af6bb48bd10233bf19a934, type: 3}
+  - Suit: 0
+    Rank: 12
+    Sprite: {fileID: 21300000, guid: e781a94de2695364f862d2f2befb9f09, type: 3}
+  - Suit: 0
+    Rank: 13
+    Sprite: {fileID: 21300000, guid: d1318617574cb574f94e4af5e00160f7, type: 3}
+  - Suit: 1
+    Rank: 1
+    Sprite: {fileID: 21300000, guid: 355a0d4ee5b14bd40be11f921b89819b, type: 3}
+  - Suit: 1
+    Rank: 2
+    Sprite: {fileID: 21300000, guid: 77938cf94ac8a5a469d27aa61614baa3, type: 3}
+  - Suit: 1
+    Rank: 3
+    Sprite: {fileID: 21300000, guid: 3b26f4724efde624c82ef7a55ae9a8e5, type: 3}
+  - Suit: 1
+    Rank: 4
+    Sprite: {fileID: 21300000, guid: 8119cb542ec0250418d0cde9a0d9906e, type: 3}
+  - Suit: 1
+    Rank: 5
+    Sprite: {fileID: 21300000, guid: 25291a52608833e4892d1460fd6af020, type: 3}
+  - Suit: 1
+    Rank: 6
+    Sprite: {fileID: 21300000, guid: 95489836e1e77f447a83a507fef0b920, type: 3}
+  - Suit: 1
+    Rank: 7
+    Sprite: {fileID: 21300000, guid: 915040fe0a0e42749ade6ebe270b35f8, type: 3}
+  - Suit: 1
+    Rank: 8
+    Sprite: {fileID: 21300000, guid: 4095e1384a2f9ea479f75bbe655c9015, type: 3}
+  - Suit: 1
+    Rank: 9
+    Sprite: {fileID: 21300000, guid: 56ab892f5d6c34747aa3fe1d519da48f, type: 3}
+  - Suit: 1
+    Rank: 10
+    Sprite: {fileID: 21300000, guid: 6167ddb637107104eae82c621e19e5f9, type: 3}
+  - Suit: 1
+    Rank: 11
+    Sprite: {fileID: 21300000, guid: 5e619d4dfdacc364782d7476aad4f271, type: 3}
+  - Suit: 1
+    Rank: 12
+    Sprite: {fileID: 21300000, guid: 9674a0e8399d9d24896a590425d1645b, type: 3}
+  - Suit: 1
+    Rank: 13
+    Sprite: {fileID: 21300000, guid: 02ab04a66ef3be244b0f9c9bebc1f933, type: 3}
+  - Suit: 2
+    Rank: 1
+    Sprite: {fileID: 21300000, guid: 76001e3118879e1479a7d4231e9d8741, type: 3}
+  - Suit: 2
+    Rank: 2
+    Sprite: {fileID: 21300000, guid: fbc14164dcb8c1c41bcc1eb4b868c342, type: 3}
+  - Suit: 2
+    Rank: 3
+    Sprite: {fileID: 21300000, guid: 5d61b18373c1ace419cf08b9dd448348, type: 3}
+  - Suit: 2
+    Rank: 4
+    Sprite: {fileID: 21300000, guid: 26ef9f70490ee8845ba290d67de3d48e, type: 3}
+  - Suit: 2
+    Rank: 5
+    Sprite: {fileID: 21300000, guid: c0f281ff28d5e494fb73e3bd56a6fac2, type: 3}
+  - Suit: 2
+    Rank: 6
+    Sprite: {fileID: 21300000, guid: 28ee3f8462fd46e4e91ff3bdb251b54c, type: 3}
+  - Suit: 2
+    Rank: 7
+    Sprite: {fileID: 21300000, guid: 8f38daa117c389f40b5ae805fe97c128, type: 3}
+  - Suit: 2
+    Rank: 8
+    Sprite: {fileID: 21300000, guid: 753fcde8bee3bac44b5865f3f422cfda, type: 3}
+  - Suit: 2
+    Rank: 9
+    Sprite: {fileID: 21300000, guid: b1c21207cda550b4d92bbc0585c478fc, type: 3}
+  - Suit: 2
+    Rank: 10
+    Sprite: {fileID: 21300000, guid: da8b805fc4c09cf4a9441880ebbaf911, type: 3}
+  - Suit: 2
+    Rank: 11
+    Sprite: {fileID: 21300000, guid: 156df919f483ff747a5f03ef5206dc73, type: 3}
+  - Suit: 2
+    Rank: 12
+    Sprite: {fileID: 21300000, guid: 3a5e90e16919293489e051e12f95fbc7, type: 3}
+  - Suit: 2
+    Rank: 13
+    Sprite: {fileID: 21300000, guid: affbfb392469b814b86d328541fa395b, type: 3}
+  - Suit: 3
+    Rank: 1
+    Sprite: {fileID: 21300000, guid: e02bcee5e214b33479609fa6506cee5b, type: 3}
+  - Suit: 3
+    Rank: 2
+    Sprite: {fileID: 21300000, guid: 4fb43431a25b8c84084ec496659f95a3, type: 3}
+  - Suit: 3
+    Rank: 3
+    Sprite: {fileID: 21300000, guid: 6aff2d0f5790ed9429c026f53a4ceefd, type: 3}
+  - Suit: 3
+    Rank: 4
+    Sprite: {fileID: 21300000, guid: 558278c77e80f5041aaaeaaf6c00761d, type: 3}
+  - Suit: 3
+    Rank: 5
+    Sprite: {fileID: 21300000, guid: a6093821a0bf3274da5d1a749f3ecfe3, type: 3}
+  - Suit: 3
+    Rank: 6
+    Sprite: {fileID: 21300000, guid: 2772e0ff601c4a943953dc2af29d6622, type: 3}
+  - Suit: 3
+    Rank: 7
+    Sprite: {fileID: 21300000, guid: 6e4189505dff4c34289da2ca8aa4b577, type: 3}
+  - Suit: 3
+    Rank: 8
+    Sprite: {fileID: 21300000, guid: 85c0f942dcce2924c9e8ee0b9bb788d3, type: 3}
+  - Suit: 3
+    Rank: 9
+    Sprite: {fileID: 21300000, guid: c71f2c223e68d1d488d011ead465f42a, type: 3}
+  - Suit: 3
+    Rank: 10
+    Sprite: {fileID: 21300000, guid: 648a4090eae39c34c818b2f5a8bc2666, type: 3}
+  - Suit: 3
+    Rank: 11
+    Sprite: {fileID: 21300000, guid: 76a7b4a75df6e674caf2f9648561f6cf, type: 3}
+  - Suit: 3
+    Rank: 12
+    Sprite: {fileID: 21300000, guid: e622dc036afd1fb44b44488954dffbf9, type: 3}
+  - Suit: 3
+    Rank: 13
+    Sprite: {fileID: 21300000, guid: 8dc707f607ec0804d9b688e99f1cabff, type: 3}
+  _cardBack: {fileID: 21300000, guid: 7bf05eccd070ef649b6cd329bdffe0ce, type: 3}
+  _cardsSpritesDirectory: Blackjack/Themes/Default Theme/Cards/
+  _cardsSpriteFilenamePrefix: card_
+  _chipsSpritesDirectory: Blackjack/Themes/Default Theme/Chips
+  _chipsPrefabs:
+  - color: 
+    value: 1
+    prefab: {fileID: 0}
+  - color: 
+    value: 5
+    prefab: {fileID: 0}
+  - color: 
+    value: 25
+    prefab: {fileID: 0}
+  - color: 
+    value: 100
+    prefab: {fileID: 0}
+  _bustSprite: {fileID: 21300000, guid: 744c63dff9e320d4ca2c1a6e21208c8d, type: 3}
+  _winSprite: {fileID: 21300000, guid: 7dc6bbba72c578a44afe69f176b69638, type: 3}
+  _pushSprite: {fileID: 21300000, guid: cff09c9f04017074ea7ed3269f8c3b7b, type: 3}
+  _loseSprite: {fileID: 21300000, guid: e0bedeab65c1abb4a879c180127e121a, type: 3}
