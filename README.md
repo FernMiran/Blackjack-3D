@@ -16,7 +16,7 @@ This project is a 3D implementation of the classic casino game Blackjack, develo
 - Modular code structure for easy expansion and maintenance.
 
 ## Future Enhancements
-- Implement splitting logic and animations.
+- Implement "Split" logic and animations.
 - Additional casino ambient sounds and visual effects.
 - Implement a betting system.
 - Integration with a broader casino game suite.
