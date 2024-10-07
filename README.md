@@ -25,6 +25,11 @@ This project is a 3D implementation of the classic casino game Blackjack, develo
 This project was developed as part of a learning journey in game development with Unity. It showcases 3D animations, C# programming, and game logic implementation skills.
 
 ## Screenshots
+![image](https://github.com/user-attachments/assets/23f48228-dbed-4995-85af-9b21adb30cf2)
+
+![image](https://github.com/user-attachments/assets/c88f4ad3-b4bf-4241-82f7-b6a3aac7c22f)
+
+![image](https://github.com/user-attachments/assets/e19cd7f2-1741-4faa-b2ea-d1cbcf68c737)
 
 ## How to Run
 1. Clone the repository
