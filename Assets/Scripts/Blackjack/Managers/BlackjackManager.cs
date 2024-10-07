@@ -49,8 +49,8 @@ namespace CasinoGames.Blackjack
 		/// <summary>
 		/// Event when waiting for input. Parameters: Player, Hand, Callback
 		/// </summary>
-		public Action<Player, int, Action<Decision>> OnWaitForPlayerDecision;
-		public Action<Decision> OnPlayerDecided;
+		public Action<Player, int, Action<Player, Decision>> OnWaitForPlayerDecision;
+		public Action<Player, Decision> OnPlayerDecided;
 
 		// Dealing
 		public Action<Deal> OnCardDealStarted;
@@ -133,7 +133,7 @@ namespace CasinoGames.Blackjack
 				_playersDecisions.Add(newPlayer.Hands[0], default);
 			}
 
-			_dealer = new Player("Player Dealer", isDealer:true);
+			_dealer = new Player("Player Dealer", isDealer: true);
 
 			OnPlayersCreated?.Invoke(_players.ToArray(), _dealer);
 		}
@@ -194,7 +194,7 @@ namespace CasinoGames.Blackjack
 					{
 						if (_playersDecisions[hand] == Decision.Undecided)
 						{
-							Action<Decision> onPlayerDecided = (decision) =>
+							Action<Player, Decision> onPlayerDecided = (player, decision) =>
 							{
 								_playersDecisions[hand] = decision;
 							};
@@ -202,6 +202,8 @@ namespace CasinoGames.Blackjack
 							OnWaitForPlayerDecision?.Invoke(player, handIndex, onPlayerDecided);
 
 							yield return new WaitUntil(() => _playersDecisions[hand] != Decision.Undecided);
+
+							OnPlayerDecided?.Invoke(player, _playersDecisions[hand]);
 						}
 
 						// Switch decision

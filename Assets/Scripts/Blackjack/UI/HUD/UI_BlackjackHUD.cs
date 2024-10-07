@@ -16,7 +16,8 @@ namespace CasinoGames.Blackjack.UI
 
 		[Header("Decision Popup")]
 		[SerializeField]
-		UI_DecisionPanel _decisionPanelPopup = null;
+		UI_DecisionPanel _decisionPanelPopupPrefab = null;
+		UI_DecisionPanel _decisionPanelPopupInstance = null;
 
 		private void Reset()
 		{
@@ -29,7 +30,10 @@ namespace CasinoGames.Blackjack.UI
 			_blackjackManager.OnPlayersCreated += HandlePlayersCreated;
 
 			_blackjackManager.OnCardDealFinished += HandleCardDealFinished;
+
 			_blackjackManager.OnWaitForPlayerDecision += HandleWaitForPlayerDecision;
+			_blackjackManager.OnPlayerDecided += HandlePlayerDecided;
+
 			_blackjackManager.OnHandsResults += HandleHandsResults;
 
 			_blackjackManager.OnBlackjackReset += HandleReset;
@@ -45,9 +49,9 @@ namespace CasinoGames.Blackjack.UI
 			_blackjackManager.ResetGame();
 		}
 
-		public void TakeDecision(Decision decision, Action<Decision> callback = null)
+		public void TakeDecision(Player player, Decision decision, Action<Player, Decision> callback = null)
 		{
-			callback?.Invoke(decision);
+			callback?.Invoke(player, decision);
 		}
 
 		private void HandlePlayersCreated(Player[] players, Player player)
@@ -60,14 +64,14 @@ namespace CasinoGames.Blackjack.UI
 			_playersHandsManager.UpdatePanelWithDeal(deal);
 		}
 
-		private void HandleWaitForPlayerDecision(Player player, int hand, Action<Decision> callback)
+		private void HandleWaitForPlayerDecision(Player player, int hand, Action<Player, Decision> callback)
 		{
 			InstantiateDecisionPopup(player, hand, callback);
 		}
 
-		private void HandlePlayerDecided(Decision decision)
+		private void HandlePlayerDecided(Player player, Decision decision)
 		{
-			Destroy(_decisionPanelPopup.gameObject);
+			Destroy(_decisionPanelPopupInstance.gameObject);
 		}
 
 		private void HandleHandsResults(Dictionary<Hand, Results> results)
@@ -80,10 +84,10 @@ namespace CasinoGames.Blackjack.UI
 			_playersHandsManager.ResetHands();
 		}
 
-		private void InstantiateDecisionPopup(Player player, int hand, Action<Decision> callback)
+		private void InstantiateDecisionPopup(Player player, int hand, Action<Player, Decision> callback)
 		{
-			_decisionPanelPopup = Instantiate(_decisionPanelPopup, transform);
-			_decisionPanelPopup.Initialize(player, hand, callback);
+			_decisionPanelPopupInstance = Instantiate(_decisionPanelPopupPrefab, transform);
+			_decisionPanelPopupInstance.Initialize(player, hand, callback);
 
 			callback += HandlePlayerDecided;
 		}

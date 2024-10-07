@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CasinoGames.Blackjack.UI
 {
@@ -8,13 +9,16 @@ namespace CasinoGames.Blackjack.UI
 	{
 		[SerializeField]
 		UI_BlackjackHUD _blackjackHUD;
-		
+
+		[SerializeField]
+		Text _playerLabel;
+
 		[SerializeField]
 		Player _player;
 		[SerializeField]
 		Hand _hand;
 
-		Action<Decision> _callbackHolder = null;
+		Action<Player, Decision> _callbackHolder = null;
 
 		private void Reset()
 		{
@@ -27,12 +31,17 @@ namespace CasinoGames.Blackjack.UI
 				_blackjackHUD = FindObjectOfType<UI_BlackjackHUD>();
 		}
 
-		public void Initialize(Player player, int hand, Action<Decision> callback = null)
+		public void Initialize(Player player, int hand, Action<Player, Decision> callback = null)
 		{
 			_player = player;
 			_hand = player.Hands[hand];
 
 			_callbackHolder = callback;
+
+			if (_playerLabel != null)
+			{
+				_playerLabel.text = player.Name.ToUpper();
+			}
 
 			ShowAvailableDecisions();
 		}
@@ -47,16 +56,18 @@ namespace CasinoGames.Blackjack.UI
 			Decide(Decision.Stand);
 		}
 
-		public void ClickDouble()
-		{
-			//Decide(Decision.Double);
-		}
-		
 		public void ClickSplit()
 		{
+			// To be implemented soon.
 			//Decide(Decision.Split);
 		}
-		
+
+		public void ClickDouble()
+		{
+			// To be implemented with betting system.
+			//Decide(Decision.Double);
+		}
+
 		private void ShowAvailableDecisions()
 		{
 			// Check hand state.
@@ -65,8 +76,7 @@ namespace CasinoGames.Blackjack.UI
 
 		private void Decide(Decision decision)
 		{
-			_blackjackHUD.TakeDecision(decision, _callbackHolder);
+			_blackjackHUD.TakeDecision(_player, decision, _callbackHolder);
 		}
-
 	}
 }
