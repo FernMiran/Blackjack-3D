@@ -10,9 +10,11 @@ namespace CasinoGames.Blackjack.UI
 		[SerializeField]
 		BlackjackManager _blackjackManager;
 
-		[Header("Dependencies")]
+		[Header("Sub-Modules")]
 		[SerializeField]
-		UI_PlayersHandsManager _playersHandsManager; // Make an observer pattern for hands panels UI controller.
+		UI_PlayersHandsManager _playersHandsManager;
+		[SerializeField]
+		UI_Panel _gameButtonsPanel;
 
 		[Header("Decision Popup")]
 		[SerializeField]
@@ -22,7 +24,10 @@ namespace CasinoGames.Blackjack.UI
 		private void Reset()
 		{
 			_blackjackManager = FindObjectOfType<BlackjackManager>();
+
+			// Get UI Modules
 			_playersHandsManager = GetComponentInChildren<UI_PlayersHandsManager>();
+			_gameButtonsPanel = GetComponentInChildren<UI_GameButtonsPanel>();
 		}
 
 		private void Awake()
@@ -42,6 +47,7 @@ namespace CasinoGames.Blackjack.UI
 		public void StartGame()
 		{
 			_blackjackManager.StartGame();
+			_gameButtonsPanel.Hide();
 		}
 
 		public void ResetGame()
@@ -49,14 +55,19 @@ namespace CasinoGames.Blackjack.UI
 			_blackjackManager.ResetGame();
 		}
 
+		public void QuitGame()
+		{
+			GameManager.QuitGame();
+		}
+
 		public void TakeDecision(Player player, Decision decision, Action<Player, Decision> callback = null)
 		{
 			callback?.Invoke(player, decision);
 		}
 
-		private void HandlePlayersCreated(Player[] players, Player player)
+		private void HandlePlayersCreated(Player[] players, Player dealer)
 		{
-			_playersHandsManager.Initialize(players, player);
+			_playersHandsManager.Initialize(players, dealer);
 		}
 
 		private void HandleCardDealFinished(Deal deal)
@@ -77,11 +88,12 @@ namespace CasinoGames.Blackjack.UI
 		private void HandleHandsResults(Dictionary<Hand, Results> results)
 		{
 			_playersHandsManager.UpdatePanelsWithResults(results);
+			_gameButtonsPanel.Show();
 		}
 
 		private void HandleReset()
 		{
-			_playersHandsManager.ResetHands();
+			_playersHandsManager.ResetAllHands();
 		}
 
 		private void InstantiateDecisionPopup(Player player, int hand, Action<Player, Decision> callback)

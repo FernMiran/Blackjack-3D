@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CasinoGames.Blackjack.UI
 {
-	public class UI_TableCard : MonoBehaviour
+	public class TableCard : MonoBehaviour
 	{
 		public Card Card { get; private set; }
 

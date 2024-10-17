@@ -6,7 +6,7 @@ namespace CasinoGames.Blackjack
 	public class UI_BettingButtons : MonoBehaviour
 	{
 		[SerializeField]
-		UI_BlackjackTableTheme _blackjackTableTheme;
+		BlackjackVisualTheme _blackjackTableTheme;
 
 		private void Reset()
 		{

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace CasinoGames.Blackjack
 {
@@ -35,9 +36,10 @@ namespace CasinoGames.Blackjack
 
 		Dictionary<Hand, Decision> _playersDecisions = new Dictionary<Hand, Decision>();
 		Dictionary<Hand, Results> _handsResults = new Dictionary<Hand, Results>();
+		// Events
 
 		// Game
-		public Action OnGameStarted;
+		public Action OnGameStarted; 
 		public Action OnGameEnded;
 
 		// Stages
@@ -46,8 +48,11 @@ namespace CasinoGames.Blackjack
 		public Action OnInitialCardsDealed;
 		public Action<Dictionary<Hand, Results>> OnHandsResults;
 
+		public Action<Player, Hand> OnPlayerHandTurnStarted;
+		public Action<Player, Hand> OnPlayerHandTurnFinished;
+
 		/// <summary>
-		/// Event when waiting for input. Parameters: Player, Hand, Callback
+		/// Event for wait for input. Parameters: Player, Hand Index, Callback when Finished
 		/// </summary>
 		public Action<Player, int, Action<Player, Decision>> OnWaitForPlayerDecision;
 		public Action<Player, Decision> OnPlayerDecided;
@@ -72,6 +77,8 @@ namespace CasinoGames.Blackjack
 		{
 			InitializeDeck();
 			InitializePlayers();
+
+			OnGameStarted?.Invoke();
 		}
 
 		private void OnDestroy()
@@ -170,7 +177,6 @@ namespace CasinoGames.Blackjack
 				Player player = _players[_playerTurn];
 				bool isPlayerTurn = true;
 
-				Debug.Log($"{player.Name} turn.");
 
 				if (player.AreHandsBusted())
 				{
@@ -184,6 +190,9 @@ namespace CasinoGames.Blackjack
 					Hand hand = player.Hands[handIndex];
 					Decision playerDecision = Decision.Undecided;
 
+					Debug.Log($"{player.Name} hand {handIndex + 1} turn.");
+					OnPlayerHandTurnStarted?.Invoke(player, hand);
+
 					if (!_playersDecisions.TryGetValue(hand, out playerDecision))
 					{
 						Debug.LogError("There was no decision slot for " + player.Name);
@@ -192,6 +201,7 @@ namespace CasinoGames.Blackjack
 
 					while (isPlayerTurn)
 					{
+						// While undecided, wait for decision
 						if (_playersDecisions[hand] == Decision.Undecided)
 						{
 							Action<Player, Decision> onPlayerDecided = (player, decision) =>
@@ -206,7 +216,7 @@ namespace CasinoGames.Blackjack
 							OnPlayerDecided?.Invoke(player, _playersDecisions[hand]);
 						}
 
-						// Switch decision
+						// Execute decision
 						switch (_playersDecisions[hand])
 						{
 							case Decision.Undecided:
@@ -215,22 +225,26 @@ namespace CasinoGames.Blackjack
 								break;
 							case Decision.Hit:
 								//Debug.Log("Waiting to hit " + player.Name + " hand #" + handIndex);
-								yield return StartCoroutine(DrawCardForPlayerHand(player, player.Hands[handIndex]));
+								yield return StartCoroutine(DrawCardForPlayerHand(player, hand));
 								//Debug.Log("Finished to hit " + player.Name + " hand #" + handIndex + $"{(player.Hands[handIndex].IsBusted() ? ", is busted." : "")}");
 
-								if (player.Hands[handIndex].IsBusted())
-								{
-									isPlayerTurn = false;
-								}
-								else
+								if (IsStillHandTurn(hand))
 								{
 									_playersDecisions[hand] = Decision.Undecided;
 								}
+								else
+								{
+									isPlayerTurn = false;
+									OnPlayerHandTurnFinished?.Invoke(player, hand);
+								}
+
 								break;
 							case Decision.Stand:
 								//Debug.Log(player + " standed");
 								isPlayerTurn = false;
 								_playersDecisions[hand] = Decision.Undecided;
+
+								OnPlayerHandTurnFinished?.Invoke(player, hand);
 								yield return null;
 								break;
 							// case Decision.Split
@@ -262,11 +276,26 @@ namespace CasinoGames.Blackjack
 			//Debug.Log("Finished dealer turn ... ");
 
 			// End turn
-			DetermineResults();
+			DetermineAllResults();
 
 			OnHandsResults?.Invoke(_handsResults);
 
 			ClearDecisions();
+		}
+
+		private bool IsStillHandTurn(Hand hand)
+		{
+			int totalValue = hand.GetTotalValue();
+			bool handIsBusted = hand.IsBusted();
+
+			if (!handIsBusted && totalValue != 21)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		private int CountDefaultValues<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
@@ -335,7 +364,7 @@ namespace CasinoGames.Blackjack
 			_isDealingCard = false;
 		}
 
-		private void DetermineResults()
+		private void DetermineAllResults()
 		{
 			for (int playerIndex = 0; playerIndex < _startingPlayers; playerIndex++)
 			{
@@ -391,11 +420,6 @@ namespace CasinoGames.Blackjack
 			Debug.Log($"{player.Name} {handPronoun} hand is a {result}. (Player {playerValue} vs Dealer {dealerValue})");
 
 			return result;
-		}
-
-		private void EndGame()
-		{
-			OnGameEnded?.Invoke();
 		}
 	}
 }

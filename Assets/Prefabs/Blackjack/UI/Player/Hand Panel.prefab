@@ -377,6 +377,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Decision Buttons Panel (Small)
       objectReference: {fileID: 0}
+    - target: {fileID: 5363188966699180463, guid: c49b928e576661448921a199fef89b29, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

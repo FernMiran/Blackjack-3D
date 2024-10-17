@@ -11,7 +11,7 @@ namespace CasinoGames.Blackjack.UI
 		Text _valueText;
 
 		[SerializeField]
-		UI_BlackjackTableTheme _blackjackTableTheme;
+		BlackjackVisualTheme _blackjackTableTheme;
 
 		[SerializeField]
 		UI_DecisionPanel _decisionPanel;

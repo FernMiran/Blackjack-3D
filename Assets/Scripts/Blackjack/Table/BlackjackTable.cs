@@ -5,17 +5,15 @@ using UnityEngine;
 
 namespace CasinoGames.Blackjack.UI
 {
-	public class UI_BlackjackTable : MonoBehaviour
+	public class BlackjackTable : MonoBehaviour
 	{
-		[Header("Model")]
+		[Header("Blackjack Manager")]
 		[SerializeField]
 		private BlackjackManager _blackjackManager;
 
 		[Header("Theme Data")]
 		[SerializeField]
-		private UI_BlackjackTableTheme _tableTheme;
-
-		private Queue<Deal> _deals = new Queue<Deal>();
+		private BlackjackVisualTheme _tableTheme;
 
 		[Header("Table")]
 		[SerializeField]
@@ -23,24 +21,27 @@ namespace CasinoGames.Blackjack.UI
 
 		[Header("Instantiation")]
 		[SerializeField]
-		private UI_TableCard _cardPrefab;
+		private TableCard _cardPrefab;
 		
 		[SerializeField]
 		private bool _isHandlingCards = false;
-		Dictionary<Card, UI_TableCard> _card3DObjectsDictionary = new Dictionary<Card, UI_TableCard>();
+		Dictionary<Card, TableCard> _tableCardsDictionary = new Dictionary<Card, TableCard>();
 
-		[Header("Initial Dealing")]
+		[Header("Speed")]
 		[SerializeField]
 		private float _lerpingDuration = 1f;
 		[SerializeField]
 		private float _flippingDuration = 1f;
 
-		[Header("Player Positions")]
+		[Header("Hands")]
 		[SerializeField]
-		private UI_PlayerTableHand _dealerUIObject;
+		private TableHandsManager _tableHandsManager;
+		[SerializeField]
+		private TableHandsController _dealerTableHand;
 		[SerializeField]
 		private Transform _playersTableHandsParent;
-		private Dictionary<Player, UI_PlayerTableHand> _playerPositionsDictionary = new Dictionary<Player, UI_PlayerTableHand>();
+
+		private Dictionary<Player, TableHandsController> _playerPositionsDictionary = new Dictionary<Player, TableHandsController>();
 		
 		[SerializeField]
 		private GameObject _playerPositionPlaceholderPrefab;
@@ -48,19 +49,30 @@ namespace CasinoGames.Blackjack.UI
 		[Header("Spacing")]
 		[SerializeField]
 		private Vector3 _stackedSpacing = new Vector3(0.01f, 0f, -0.03f);
+		public Vector3 StackedSpacing => _stackedSpacing;
 		[SerializeField]
 		private Vector3 _fannedSpacing = new Vector3(0.1f, 0f, -0.03f);
+		public Vector3 FannedSpacing => _fannedSpacing;
 
 		private void Reset()
 		{
 			_blackjackManager = FindObjectOfType<BlackjackManager>();
+			_tableHandsManager = GetComponentInChildren<TableHandsManager>();
 		}
 
 		private void Awake()
 		{
+			SetupEvents();
+		}
+
+		private void SetupEvents()
+		{
 			// Setup
 			_blackjackManager.OnPlayersCreated += HandlePlayersCreated;
-            _blackjackManager.OnDeckCreated += HandleDeckCreated;
+			_blackjackManager.OnDeckCreated += HandleDeckCreated;
+
+			_blackjackManager.OnPlayerHandTurnStarted += HandlePlayerHandTurnStarted;
+			_blackjackManager.OnPlayerHandTurnFinished += HandlePlayerHandTurnFinished;
 
 			// Deals
 			_blackjackManager.OnCardDealStarted += HandleCardDealStarted;
@@ -69,30 +81,29 @@ namespace CasinoGames.Blackjack.UI
 			_blackjackManager.OnCardFlipStarted += HandleCardFlipStarted;
 
 			// Game Stages
-			_blackjackManager.OnBlackjackReset += HandleReset;
+			_blackjackManager.OnBlackjackReset += HandleBlackjackReset;
 		}
 
-		// 2D UI
-		public void StartGame()
+		private void HandlePlayerHandTurnStarted(Player player, Hand hand)
 		{
-			_blackjackManager.StartGame();
+			_tableHandsManager.EnableBlinking(player, hand, true);
 		}
-
-		public void ResetGame()
+		
+		private void HandlePlayerHandTurnFinished(Player player, Hand hand)
 		{
-			_blackjackManager.ResetGame();
+			_tableHandsManager.EnableBlinking(player, hand, false);
 		}
 
 		private void HandleDeckCreated(Deck deck)
 		{
-			if (_card3DObjectsDictionary.Count > 0)
+			if (_tableCardsDictionary.Count > 0)
 			{
-				foreach (KeyValuePair<Card, UI_TableCard> item in _card3DObjectsDictionary)
+				foreach (KeyValuePair<Card, TableCard> item in _tableCardsDictionary)
 				{
 					Destroy(item.Value.gameObject);
 				}
 
-				_card3DObjectsDictionary.Clear();
+				_tableCardsDictionary.Clear();
 			}
 
 			Vector3 instantiatingPosition = _deckTransform.position + Vector3.zero;
@@ -101,7 +112,7 @@ namespace CasinoGames.Blackjack.UI
 			{
 				Card card = deck.Cards[i];
 
-				UI_TableCard cardObject = Instantiate(_cardPrefab, _deckTransform);
+				TableCard cardObject = Instantiate(_cardPrefab, _deckTransform);
 
 				cardObject.Sprite.sprite = _tableTheme.GetCardSprite(card.CardSuit, card.Rank);
 				cardObject.transform.name = $"{card.CardSuit} {card.Rank} {cardObject.transform.name}";
@@ -111,13 +122,13 @@ namespace CasinoGames.Blackjack.UI
 
 				instantiatingPosition += _stackedSpacing;
 
-				_card3DObjectsDictionary.Add(card, cardObject);
+				_tableCardsDictionary.Add(card, cardObject);
 			}
 		}
 
 		private void HandlePlayersCreated(Player[] players, Player dealer)
 		{
-			UI_PlayerTableHand[] playerPositions = _playersTableHandsParent.GetComponentsInChildren<UI_PlayerTableHand>();
+			TableHandsController[] playerPositions = _playersTableHandsParent.GetComponentsInChildren<TableHandsController>();
 
 			for (int i = 0; i < players.Length; i++)
 			{
@@ -128,9 +139,47 @@ namespace CasinoGames.Blackjack.UI
 			}
 		}
 
-		void HandleCardFlipStarted(Card card, Action<Card> callback)
+		// Deal
+		private void HandleCardDealStarted(Deal deal)
 		{
-			_card3DObjectsDictionary.TryGetValue(card, out UI_TableCard cardObject);
+			if (!_tableCardsDictionary.TryGetValue(deal.Card, out TableCard tableCard))
+				return;
+
+			TableHandsController tableHandsController = _tableHandsManager.GetPlayerTableHandsController(deal.Player);
+			
+			Vector3 spacing = GetArrangementSpacing(deal.Arrangement);
+			Vector3 targetPosition = _tableHandsManager.GetNextCardPosition(deal.Player, deal.Hand, spacing);
+			
+			//StartCoroutine(DealCard(tableCard, tableHandsController.transform.eulerAngles, targetPosition, deal));
+			StartCoroutine(DealCard(tableCard, Vector3.zero, targetPosition, deal));
+
+			tableHandsController.AddCardToHand(deal.Hand, tableCard);
+		}
+
+		private IEnumerator DealCard(TableCard card, Vector3 targetAngles, Vector3 targetPosition, Deal deal)
+		{
+			List<Coroutine> runningCoroutines = new List<Coroutine>();
+
+			if (deal.Flip)
+			{
+				runningCoroutines.Add(StartCoroutine(card.Rotator.Rotate(new Vector3(targetAngles.x, 180f, targetAngles.z), true, _flippingDuration)));
+			}
+
+			runningCoroutines.Add(StartCoroutine(card.Mover.Move(targetPosition, null, _lerpingDuration)));
+
+			// Wait for all coroutines to complete
+			foreach (var coroutine in runningCoroutines)
+			{
+				yield return coroutine;
+			}
+
+			deal.Callback?.Invoke(deal);
+		}
+
+		// Flip
+		private void HandleCardFlipStarted(Card card, Action<Card> callback)
+		{
+			_tableCardsDictionary.TryGetValue(card, out TableCard cardObject);
 
 			if (cardObject == null)
 			{
@@ -142,40 +191,7 @@ namespace CasinoGames.Blackjack.UI
 			}
 		}
 
-		void HandleCardDealStarted(Deal deal)
-		{
-			if (!_card3DObjectsDictionary.TryGetValue(deal.Card, out UI_TableCard cardObject))
-				return;
-
-			UI_PlayerTableHand playerUIObject = GetPlayerUIObject(deal.Player);
-
-			Vector3 targetPosition = GetNextCardPosition(playerUIObject, deal.Arrangement);
-			StartCoroutine(DealCardToPlayer(cardObject, playerUIObject.transform.eulerAngles, targetPosition, deal));
-
-			playerUIObject.UI_Cards.Add(cardObject);
-		}
-
-		private IEnumerator DealCardToPlayer(UI_TableCard card, Vector3 targetAngles, Vector3 targetPosition, Deal deal)
-		{
-			List<Coroutine> runningCoroutines = new List<Coroutine>();
-
-			if (deal.Flip)
-			{
-				runningCoroutines.Add(StartCoroutine(card.Rotator.Rotate(new Vector3(targetAngles.x, 180f, targetAngles.z))));
-			}
-
-			runningCoroutines.Add(StartCoroutine(card.Mover.Move(targetPosition)));
-
-			// Wait for all coroutines to complete
-			foreach (var coroutine in runningCoroutines)
-			{
-				yield return coroutine;
-			}
-
-			deal.Callback?.Invoke(deal);
-		}
-
-		private IEnumerator FlipCard(UI_TableCard card, Action<Card> finishCallback = null)
+		private IEnumerator FlipCard(TableCard card, Action<Card> finishCallback = null)
 		{
 			Vector3 targetAngle = new Vector3(card.transform.eulerAngles.x, 180f, card.transform.eulerAngles.y);
 
@@ -186,55 +202,21 @@ namespace CasinoGames.Blackjack.UI
 				rotationComplete = true;
 			};
 
-			yield return StartCoroutine(card.Rotator.Rotate(targetAngle, true, 1f, rotationFinishedCallback));
+			yield return StartCoroutine(card.Rotator.Rotate(targetAngle, true, _flippingDuration, rotationFinishedCallback));
 
 			yield return new WaitUntil(() => rotationComplete);
 
 			finishCallback?.Invoke(card.Card);
 		}
 
-		private void HandleReset()
+		private void HandleBlackjackReset()
 		{
-			foreach (KeyValuePair<Player, UI_PlayerTableHand> tableHand in _playerPositionsDictionary)
+			foreach (KeyValuePair<Player, TableHandsController> playerTableHand in _playerPositionsDictionary)
 			{
-				tableHand.Value.ResetCards();
-			}
-		}
-
-		private UI_PlayerTableHand GetPlayerUIObject(Player player)
-		{
-			UI_PlayerTableHand playerUIObject;
-
-			// If player not found in regular players
-			if (!_playerPositionsDictionary.TryGetValue(player, out playerUIObject))
-			{
-				// Check if it's the dealer
-				if (player.IsDealer)
-				{
-					playerUIObject = _dealerUIObject;
-				}
-				else
-				{
-					Debug.LogError("Player " + player.Name + " has no UI object to animate a deal.");
-				}
+				playerTableHand.Value.ResetAllHandsCards();
 			}
 
-			return playerUIObject;
-		}
-
-		private Vector3 GetNextCardPosition(UI_PlayerTableHand playerTableHand, Arrangement arrangement)
-		{
-			List<UI_TableCard> playerAddedUICards = playerTableHand.UI_Cards;
-
-			Vector3 targetPosition = playerTableHand.transform.position;
-			Vector3 spacing = GetArrangementSpacing(arrangement);
-
-			if (playerAddedUICards.Count > 0)
-			{
-				targetPosition += playerAddedUICards.Count * spacing;
-			}
-
-			return targetPosition;
+			_dealerTableHand.ResetAllHandsCards();
 		}
 
 		private Vector3 GetArrangementSpacing(Arrangement arrangement)
@@ -273,9 +255,9 @@ namespace CasinoGames.Blackjack.UI
 		private class GeneratedCard
 		{
 			public UI_CardData CardSprite;
-			public UI_TableCard CardObject;
+			public TableCard CardObject;
 
-            public GeneratedCard(UI_CardData cardSprite, UI_TableCard cardObject)
+            public GeneratedCard(UI_CardData cardSprite, TableCard cardObject)
             {
                 CardSprite = cardSprite;
 				CardObject = cardObject;

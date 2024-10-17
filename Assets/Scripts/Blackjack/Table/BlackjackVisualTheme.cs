@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace CasinoGames.Blackjack.UI
 {
-	[CreateAssetMenu(fileName = "New Blackjack UI Data", menuName = "Blackjack/Visuals/Data")]
-	public class UI_BlackjackTableTheme : ScriptableObject
+	[CreateAssetMenu(fileName = "New Blackjack Visual Theme Data", menuName = "Blackjack/Visual Theme")]
+	public class BlackjackVisualTheme : ScriptableObject
 	{
 		public Font ThemeFont => _font;
 		[SerializeField]

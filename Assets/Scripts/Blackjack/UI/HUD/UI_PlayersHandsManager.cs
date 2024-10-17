@@ -67,12 +67,15 @@ namespace CasinoGames.Blackjack.UI
 			}
 		}
 		
-		public void ResetHands()
+		public void ResetAllHands()
 		{
+			Debug.Log("Resetting all hands");
 			foreach (KeyValuePair<Hand, UI_PlayerHandsController> handController in _playerHandsDictionary)
 			{
+				Debug.Log("Resetting " + handController.Key.ToString() + " " + handController.Value.ToString());
 				handController.Value.ResetHands();
 			}
+			Debug.Log("Finished resetting all hands");
 		}
 
 	}

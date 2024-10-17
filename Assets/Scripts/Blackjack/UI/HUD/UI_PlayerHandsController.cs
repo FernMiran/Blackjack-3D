@@ -11,7 +11,6 @@ namespace CasinoGames.Blackjack.UI
 		[Header("Hands")]
 		[SerializeField]
 		List<UI_PlayerHandPanel> _handsPanels = new List<UI_PlayerHandPanel>();
-		public List<UI_PlayerHandPanel> HandsPanels  => _handsPanels;
 
 		Dictionary<Hand, UI_PlayerHandPanel> handsPanelsDictionary = new Dictionary<Hand, UI_PlayerHandPanel>();
 
@@ -67,10 +66,13 @@ namespace CasinoGames.Blackjack.UI
 
 		public void ResetHands()
 		{
+			Debug.Log("Resetting player hands");
 			foreach (KeyValuePair<Hand, UI_PlayerHandPanel> handPanel in handsPanelsDictionary)
 			{
+				Debug.Log("Resetting " + handPanel.Key.ToString() + " player hand panel" + handPanel.Value.ToString());
 				handPanel.Value.ResetHand();
 			}
+			Debug.Log("Finished resetting player hands");
 		}
 	}
 }
