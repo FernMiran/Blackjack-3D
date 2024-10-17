@@ -4,19 +4,20 @@
 This project is a 3D implementation of the classic casino game Blackjack, developed using Unity. It features realistic 3D card animations, an intuitive user interface, and adheres to standard Blackjack rules.
 
 ## Key Features
-- Fully 3D environment with animated card dealing and flipping
+- Fully 3D environment with animated card dealing and flipping.
 - Realistic card physics and interactions
 - Multiple local players.
+- Highly customizable visual themes and parameters.
 - Intuitive UI for player actions (Hit, Stand)
 - Accurate Blackjack rules implementation.
 
 ## Technical Highlights
 - Coroutine-based animation system for smooth card movements.
-- Event-driven architecture, with decoupled and expandable logic and UI.
+- Event-driven architecture, with decoupled and expandable logic and view.
 - Modular code structure for easy expansion and maintenance.
 
 ## Future Enhancements
-- Implement "Split" logic and animations.
+- Implement "Split" and "Double" logic and animations.
 - Additional casino ambient sounds and visual effects.
 - Implement a betting system.
 - Integration with a broader casino game suite.
@@ -32,11 +33,12 @@ This project was developed as part of a learning journey in game development wit
 ![image](https://github.com/user-attachments/assets/e19cd7f2-1741-4faa-b2ea-d1cbcf68c737)
 
 ## How to Run
-1. Clone the repository
-2. Open the project in Unity (version X.X.X or later)
-3. Load the main scene and press play in the Unity editor
+1. Download the release RAR file.
+2. Unpack the RAR file.
+3. Execute "Blackjack-3D.exe"
 
-## Executable
+## Release
+[https://github.com/FernMiran/Blackjack-3D/releases/tag/release]
 
 ## Feedback and Contributions
 Feedback and contributions are welcome. Please open an issue or submit a pull request if you have improvement suggestions.
