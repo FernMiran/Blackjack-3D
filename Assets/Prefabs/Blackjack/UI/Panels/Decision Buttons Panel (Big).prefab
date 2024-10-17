@@ -430,6 +430,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Split Button (Legacy) Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 3196581559211753618, guid: d32fa07db0f00234f8e4f8a32d5206d5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4518543300934052941, guid: d32fa07db0f00234f8e4f8a32d5206d5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -825,6 +829,10 @@ PrefabInstance:
     - target: {fileID: 8734103314865668368, guid: ff16a8f5b8feaca4daa3f7f48d6f09e4, type: 3}
       propertyPath: m_Name
       value: Double Button (Legacy) Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734103314865668368, guid: ff16a8f5b8feaca4daa3f7f48d6f09e4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9002405919466102608, guid: ff16a8f5b8feaca4daa3f7f48d6f09e4, type: 3}
       propertyPath: m_SizeDelta.x
