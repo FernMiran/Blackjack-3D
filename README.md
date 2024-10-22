@@ -16,6 +16,9 @@ This project is a 3D implementation of the classic casino game Blackjack, develo
 - Event-driven architecture, with decoupled and expandable logic and view.
 - Modular code structure for easy expansion and maintenance.
 
+## Development Process
+The entire application took me 3 weeks to complete and it's completely made with C# and the Unity Engine (no shaders). The objective of this project was to practice a decoupled architecture, and the complete game production cycle with a simple game to showcase in my portfolio.
+
 ## Future Enhancements
 - Implement "Split" and "Double" logic and animations.
 - Additional casino ambient sounds and visual effects.
