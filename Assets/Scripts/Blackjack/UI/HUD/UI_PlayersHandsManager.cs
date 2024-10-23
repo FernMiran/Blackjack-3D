@@ -40,9 +40,17 @@ namespace CasinoGames.Blackjack.UI
 			_playerHandsDictionary.Add(dealer.Hands[0], lastPlayerHands);
 		}
 
-		public void UpdatePanelWithDeal(Deal deal)
+		public void UpdateHandPanelWithDeal(Deal deal)
 		{
 			if (_playerHandsDictionary.TryGetValue(deal.Hand, out UI_PlayerHandsController playerHands))
+			{
+				playerHands.UpdatePanelsValues();
+			}
+		}
+
+		public void UpdateHandPanelWithFlip(Flip flip)
+		{
+			if (_playerHandsDictionary.TryGetValue(flip.Hand, out UI_PlayerHandsController playerHands))
 			{
 				playerHands.UpdatePanelsValues();
 			}

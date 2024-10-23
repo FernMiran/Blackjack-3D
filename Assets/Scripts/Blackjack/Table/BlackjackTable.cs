@@ -177,9 +177,10 @@ namespace CasinoGames.Blackjack.UI
 		}
 
 		// Flip
-		private void HandleCardFlipStarted(Card card, Action<Card> callback)
+		private void HandleCardFlipStarted(Flip flip)
 		{
-			_tableCardsDictionary.TryGetValue(card, out TableCard cardObject);
+
+			_tableCardsDictionary.TryGetValue(flip.Card, out TableCard cardObject);
 
 			if (cardObject == null)
 			{
@@ -187,11 +188,11 @@ namespace CasinoGames.Blackjack.UI
 			}
 			else
 			{
-				StartCoroutine(FlipCard(cardObject, callback));
+				StartCoroutine(FlipCard(flip, cardObject));
 			}
 		}
 
-		private IEnumerator FlipCard(TableCard card, Action<Card> finishCallback = null)
+		private IEnumerator FlipCard(Flip flip, TableCard card)
 		{
 			Vector3 targetAngle = new Vector3(card.transform.eulerAngles.x, 180f, card.transform.eulerAngles.y);
 
@@ -206,7 +207,7 @@ namespace CasinoGames.Blackjack.UI
 
 			yield return new WaitUntil(() => rotationComplete);
 
-			finishCallback?.Invoke(card.Card);
+			flip.EndCallback?.Invoke(flip);
 		}
 
 		private void HandleBlackjackReset()

@@ -13,7 +13,7 @@ namespace CasinoGames.Blackjack
 		Rank _rank;
 		public Rank Rank => _rank;
 
-		public bool IsFlipped { get; set; } = false;
+		public bool IsFlipped { get; private set; } = false;
 		public string Suit { get; internal set; }
 
 		public Card(Suit suit, Rank rank)
@@ -29,9 +29,14 @@ namespace CasinoGames.Blackjack
 
 		public int GetValue()
 		{
-			if ((int)Rank <= 10) return (int)Rank;
 			if (Rank == Rank.Ace) return 11;
+			if ((int)Rank <= 10) return (int)Rank;
 			return 10;
+		}
+
+		public void Flip(bool flip)
+		{
+			IsFlipped = flip;
 		}
 	}
 

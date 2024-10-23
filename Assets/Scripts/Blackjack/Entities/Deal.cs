@@ -13,7 +13,7 @@ namespace CasinoGames.Blackjack
 
 		public Action<Deal> Callback;
 
-		public Deal(Player player, Hand hand, Card card, bool flip, Arrangement arrangement, Action<Deal> callback)
+		public Deal(Player player, Hand hand, Card card, bool flip, Arrangement arrangement, Action<Deal> callback = null)
 		{
 			Player = player;
 			Hand = hand;

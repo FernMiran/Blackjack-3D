@@ -62,8 +62,8 @@ namespace CasinoGames.Blackjack
 		public Action<Deal> OnCardDealFinished;
 
 		// Flipping
-		public Action<Card, Action<Card>> OnCardFlipStarted;
-		public Action<Card> OnCardFlipFinished;
+		public Action<Flip> OnCardFlipStarted;
+		public Action<Flip> OnCardFlipFinished;
 
 		// Reset
 		public Action OnBlackjackReset;
@@ -188,6 +188,12 @@ namespace CasinoGames.Blackjack
 				for (int handIndex = 0; handIndex < player.Hands.Count; handIndex++)
 				{
 					Hand hand = player.Hands[handIndex];
+
+					if (hand.IsBusted() || hand.GetTotalValue() == 21)
+					{
+						continue;
+					}
+
 					Decision playerDecision = Decision.Undecided;
 
 					Debug.Log($"{player.Name} hand {handIndex + 1} turn.");
@@ -265,7 +271,7 @@ namespace CasinoGames.Blackjack
 			Hand dealerHand = _dealer.Hands[0];
 
 			// Flip suprise card
-			yield return StartCoroutine(FlipCard(dealerHand.GetLastCard()));
+			yield return StartCoroutine(FlipPlayerHandCard(_dealer, dealerHand, dealerHand.GetLastCard(), flip:true, Arrangement.Fanned));
 
 			// Hit Dealer Hand until Bust, Win or 17.
 			//Debug.Log("Dealer turn");
@@ -325,43 +331,53 @@ namespace CasinoGames.Blackjack
 		private IEnumerator DrawCardForPlayerHand(Player player, Hand hand, bool flip = true, Arrangement arrangement = Arrangement.Fanned)
 		{
 			Card drawnCardForPlayer = _deck.DrawCard();
-			DealCardToPlayerHand(player, hand, drawnCardForPlayer, flip, arrangement, OnCardDealFinished);
+			drawnCardForPlayer.Flip(flip);
+			hand.AddCard(drawnCardForPlayer);
 
-			yield return new WaitUntil(() => !_isDealingCard);
-		}
-
-		private void DealCardToPlayerHand(Player player, Hand hand, Card card, bool flip = true, Arrangement arrangement = Arrangement.Fanned, Action<Deal> callback = null)
-		{
-			_isDealingCard = true;
-
-			Deal deal = new Deal(player, hand, card, flip, arrangement, callback);
-			hand.AddCard(card);
-
-			OnCardDealStarted?.Invoke(deal);
-		}
-
-		private IEnumerator FlipCard(Card card)
-		{
-			//Debug.Log("Starting to flip.");
-
-			bool flipping = true;
-
-			Action<Card> onFlipCardFinished = (card) =>
-			{
-				flipping = false;
+			Action<Deal> onDealFinished = (deal) => { 
+				_isDealingCard = false;
+				OnCardDealFinished?.Invoke(deal);
 			};
 
-			OnCardFlipStarted?.Invoke(card, onFlipCardFinished);
+			Deal deal = new Deal(player, hand, drawnCardForPlayer, flip, arrangement, onDealFinished);
+			OnCardDealStarted?.Invoke(deal);
 
-			yield return new WaitUntil(() => !flipping);
-			//Debug.Log("Card flip.");
+			_isDealingCard = true;
 
-			card.IsFlipped = !card.IsFlipped;
+			yield return new WaitUntil(() => !_isDealingCard);
 		}
 
 		private void HandleCardDealFinishedCallback(Deal deal)
 		{
 			_isDealingCard = false;
+		}
+
+		private IEnumerator FlipCardInPlayerHand(Player player, Hand hand, Card card, bool flip = true, Arrangement arrangement = Arrangement.Fanned)
+		{
+			yield return null;
+		}
+
+		private IEnumerator FlipPlayerHandCard(Player player, Hand hand, Card card, bool flip = true, Arrangement arrangement = Arrangement.Fanned, Action<Deal> callback = null)
+		{
+			//Debug.Log("Starting to flip.");
+
+			bool flipping = true;
+
+			Action<Flip> onFlipCardFinished = (flip) =>
+			{
+				flipping = false;
+			};
+
+			Flip flipDeal = new Flip(player, hand, card, flip, onFlipCardFinished);
+
+			OnCardFlipStarted?.Invoke(flipDeal);
+
+			yield return new WaitUntil(() => !flipping);
+			//Debug.Log("Card flip.");
+
+			card.Flip(!card.IsFlipped);
+
+			OnCardFlipFinished?.Invoke(flipDeal);
 		}
 
 		private void DetermineAllResults()
@@ -370,16 +386,19 @@ namespace CasinoGames.Blackjack
 			{
 				Player player = _players[playerIndex];
 
-				if (player.AreHandsBusted())
-				{
-					Debug.Log($"{player.Name} is busted.");
-					continue;
-				}
-
 				for (int handIndex = 0; handIndex < player.Hands.Count; handIndex++)
 				{
 					Hand hand = player.Hands[handIndex];
-					Results handResult = DetermineHandResult(player, handIndex);
+					Results handResult;
+
+					if (hand.IsBusted())
+					{
+						handResult = Results.Bust;
+					}
+					else
+					{
+						handResult = DetermineHandResult(player, handIndex);
+					}
 					_handsResults.Add(hand, handResult);
 				}
 			}
@@ -422,4 +441,26 @@ namespace CasinoGames.Blackjack
 			return result;
 		}
 	}
+
+
+	public class Flip
+	{
+		public Player Player { get; private set; }
+		public Hand Hand { get; private set; }
+		public Card Card { get; private set; }
+
+		public bool Flipping { get; private set; } = true;
+		public Action<Flip> EndCallback { get; private set; } = null;
+
+		public Flip(Player player, Hand hand, Card card, bool flipping = true, Action<Flip> endCallback = null)
+		{
+			Player = player;
+			Hand = hand;
+			Card = card;
+
+			Flipping = flipping;
+			EndCallback = endCallback;
+		}
+	}
+
 }
