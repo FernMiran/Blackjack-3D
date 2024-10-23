@@ -1,3 +1,4 @@
+using CasinoGames.Blackjack;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -79,12 +80,24 @@ public class AudioManager : MonoBehaviour
 
 		if (musicSource.isPlaying)
 		{
-			StartCoroutine(FadeOut(musicSource, 1f)); // Optional fade-out for smooth transitions
+			StartCoroutine(FadeOutFadeIn(musicSource, clip, 1f)); // Optional fade-out for smooth transitions
 		}
 
 		musicSource.clip = clip;
-		musicSource.loop = true;
+		//musicSource.loop = true;
 		musicSource.Play();
+	}
+
+	private IEnumerator FadeOutFadeIn(AudioSource source, AudioClip clip, float duration)
+	{
+		if (source.isPlaying)
+		{
+			yield return StartCoroutine(FadeOut(source, duration)); // Optional fade-out for smooth transitions
+		}
+
+		Debug.Log("Faded out finished. Playing next clip");
+		source.clip = clip;
+		source.Play();
 	}
 
 	public void StopBackgroundMusic()
@@ -160,9 +173,12 @@ public class AudioManager : MonoBehaviour
 
 		while (source.volume > 0)
 		{
+			Debug.Log("Fading out " + source.volume);
 			source.volume -= startVolume * Time.deltaTime / duration;
 			yield return null;
 		}
+
+		Debug.Log("Faded out.");
 
 		source.Stop();
 		source.volume = startVolume; // Reset volume for future use

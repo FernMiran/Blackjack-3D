@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CasinoGames.Blackjack
 {
-	public class BlackjackTableAudio : MonoBehaviour
+	public class BlackjackTableAudio : MonoBehaviour // Change name to BlackjackAudio?
 	{
 		[SerializeField]
 		BlackjackManager _blackjackManager;
@@ -69,12 +69,17 @@ namespace CasinoGames.Blackjack
 				// Play the next clip
 				AudioManager.Instance.PlayBackgroundMusic(_musicClips[_currentMusicClipIndex]);
 
+				Debug.Log("[>] Music clip:" + audioClip.name + " with duration of: " + audioClip.length + "s has started: " + Time.deltaTime);
+
 				// Wait for the clip's duration before playing the next one
 				yield return new WaitForSeconds(audioClip.length);
+
+				Debug.Log("[X] Music clip:" + audioClip.name + " with duration of " + audioClip.length + "s has ended: " + Time.deltaTime);
 
 				_currentMusicClipIndex++;
 			}
 			AudioManager.Instance.StopBackgroundMusic();
+			Debug.Log("Music stopped.");
 		}
 
 		private void PlayNext()

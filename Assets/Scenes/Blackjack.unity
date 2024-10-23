@@ -3192,7 +3192,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -3609,8 +3609,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blackjackManager: {fileID: 990416887}
-  _dealCardSound: {fileID: 8300000, guid: 4377e58a8d69c6449802f285f0c231d7, type: 3}
-  _flipCardSound: {fileID: 8300000, guid: 349094c1271c7df4eb7da693b4b1f62d, type: 3}
+  _dealCard: {fileID: 8300000, guid: 4377e58a8d69c6449802f285f0c231d7, type: 3}
+  _flipCard: {fileID: 8300000, guid: 349094c1271c7df4eb7da693b4b1f62d, type: 3}
+  _play: 0
+  _musicClips:
+  - {fileID: 8300000, guid: 07058d61a65aa414488031d885898bc2, type: 3}
+  - {fileID: 8300000, guid: 5e8f502e742837c4db32fb32a27b32f3, type: 3}
+  - {fileID: 8300000, guid: 7e76f413730f7cf40b6f7cdf29f97bc5, type: 3}
+  - {fileID: 8300000, guid: 0406d02f475985b4daf7153f1541368e, type: 3}
+  - {fileID: 8300000, guid: 77ed2bf84c745e0468a7cdc0b83bdb62, type: 3}
+  _currentMusicClipIndex: 0
 --- !u!1001 &1724760210
 PrefabInstance:
   m_ObjectHideFlags: 0
