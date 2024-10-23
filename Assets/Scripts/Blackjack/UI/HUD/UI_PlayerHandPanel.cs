@@ -43,7 +43,8 @@ namespace CasinoGames.Blackjack.UI
 			{
 				if (!CheckIfHandBusted())
 				{
-					SetValue(_player.Hands[_hand].GetTotalValue());
+					int newValue = _player.Hands[_hand].GetTotalValue();
+					SetValue(newValue);
 				}
 			}
 			else
@@ -56,6 +57,9 @@ namespace CasinoGames.Blackjack.UI
 		{
 			switch (result)
 			{
+				case Results.Bust:
+					SetIcon(_blackjackTableTheme.BustSprite);
+					break;
 				case Results.Lose:
 					SetIcon(_blackjackTableTheme.LoseSprite);
 					break;
@@ -99,7 +103,7 @@ namespace CasinoGames.Blackjack.UI
 			_iconImage.gameObject.SetActive(false);
 
 			_valueText.gameObject.SetActive(true);
-			_valueText.text = _player.Hands[_hand].GetTotalValue().ToString();
+			_valueText.text = $"{value}";
 		}
 	}
 }

@@ -31,13 +31,20 @@ namespace CasinoGames.Blackjack
 				{
 					aceCount++;
 				}
-				total += card.GetValue();
+
+				if (card.IsFlipped)
+				{
+					total += card.GetValue();
+				}
 			}
 
-			while (total > 21 && aceCount > 0)
+			if (total > 21 && aceCount > 0)
 			{
-				total -= 10;
-				aceCount--;
+				while (aceCount > 0)
+				{
+					total -= 10;
+					aceCount--;
+				}
 			}
 
 			return total;

@@ -35,6 +35,7 @@ namespace CasinoGames.Blackjack.UI
 			_blackjackManager.OnPlayersCreated += HandlePlayersCreated;
 
 			_blackjackManager.OnCardDealFinished += HandleCardDealFinished;
+			_blackjackManager.OnCardFlipFinished += HandleCardFlipFinished;
 
 			_blackjackManager.OnWaitForPlayerDecision += HandleWaitForPlayerDecision;
 			_blackjackManager.OnPlayerDecided += HandlePlayerDecided;
@@ -46,6 +47,8 @@ namespace CasinoGames.Blackjack.UI
 
 		public void StartGame()
 		{
+			_blackjackManager.ResetGame(); // Automatically reset game so player can't keep dealing cards when game has finished.
+
 			_blackjackManager.StartGame();
 			_gameButtonsPanel.Hide();
 		}
@@ -53,6 +56,10 @@ namespace CasinoGames.Blackjack.UI
 		public void ResetGame()
 		{
 			_blackjackManager.ResetGame();
+
+			// Start a new game automatically (may be removed when betting system is implemented)
+			_blackjackManager.StartGame();
+			_gameButtonsPanel.Hide();
 		}
 
 		public void QuitGame()
@@ -72,7 +79,12 @@ namespace CasinoGames.Blackjack.UI
 
 		private void HandleCardDealFinished(Deal deal)
 		{
-			_playersHandsManager.UpdatePanelWithDeal(deal);
+			_playersHandsManager.UpdateHandPanelWithDeal(deal);
+		}
+
+		private void HandleCardFlipFinished(Flip flip)
+		{
+			_playersHandsManager.UpdateHandPanelWithFlip(flip);
 		}
 
 		private void HandleWaitForPlayerDecision(Player player, int hand, Action<Player, Decision> callback)
