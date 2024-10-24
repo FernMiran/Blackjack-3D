@@ -5,7 +5,7 @@ A 3D implementation of the classic casino game Blackjack developed using Unity a
 
 ## Play
 - Try it online: [https://play.unity.com/en/games/b75a9b3c-215f-4c22-b1ec-3bd5fdcda43d/blackjack-3d].
-- Download to EXE or APK: [https://github.com/FernMiran/Blackjack-3D/releases/tag/release].
+- Download EXE or APK: [https://github.com/FernMiran/Blackjack-3D/releases/tag/release].
 
 ## Source Code
 This project source code is available for the different platforms on the following branches:
