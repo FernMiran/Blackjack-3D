@@ -1,4 +1,4 @@
-# Blackjack 3D
+# Blackjack 3D (Android)
 
 ## Overview
 A 3D implementation of the classic casino game Blackjack developed using Unity and C#. It features realistic 3D card animations, audio effects, and an intuitive user interface, that adheres to standard Blackjack rules.
@@ -46,9 +46,9 @@ The application took me 3 weeks to complete and it's made using the Unity Engine
 ![image](https://github.com/user-attachments/assets/e19cd7f2-1741-4faa-b2ea-d1cbcf68c737)
 
 ## How to Run
-1. Download the release RAR file.
-2. Unpack the RAR file.
-3. Execute "Blackjack-3D.exe"
+1. Download the release APK file.
+2. Permit Android to install unknown apps.
+3. Execute "blackjack3d.apk"
 
 ## Feedback and Contributions
 Feedback and contributions are welcome. Please open an issue or submit a pull request if you have improvement suggestions.
