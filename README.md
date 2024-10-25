@@ -1,19 +1,11 @@
-# Blackjack 3D (Android)
+# Blackjack 3D (Windows/Android/WebGL)
 
 ## Overview
 A 3D implementation of the classic casino game Blackjack developed using Unity and C#. It features realistic 3D card animations, audio effects, and an intuitive user interface, that adheres to standard Blackjack rules.
 
 ## Play
-- Try it online: [https://play.unity.com/en/games/b75a9b3c-215f-4c22-b1ec-3bd5fdcda43d/blackjack-3d].
-- Download EXE or APK: [https://github.com/FernMiran/Blackjack-3D/releases/tag/release].
-
-## Source Code
-This project source code is available for the different platforms on the following branches:
-
-- Android:
-[https://github.com/FernMiran/Blackjack-3D/tree/main-android]
-- WebGL:
-[https://github.com/FernMiran/Blackjack-3D/tree/main-webgl]
+- Online: [https://play.unity.com/en/games/b75a9b3c-215f-4c22-b1ec-3bd5fdcda43d/blackjack-3d].
+- Windows EXE or Android APK: [https://github.com/FernMiran/Blackjack-3D/releases/tag/release].
 
 ## Key Features
 - Fully 3D environment with animated card dealing and flipping.
