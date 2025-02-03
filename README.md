@@ -4,7 +4,7 @@
 A 3D implementation of the classic casino game Blackjack developed using Unity and C#. It features realistic 3D card animations, audio effects, and an intuitive user interface, that adheres to standard Blackjack rules.
 
 ## Play
-- Online: [https://play.unity.com/en/games/b75a9b3c-215f-4c22-b1ec-3bd5fdcda43d/blackjack-3d].
+- : [[Play Online](https://shorturl.at/IxWb0)].
 - Windows EXE or Android APK: [https://github.com/FernMiran/Blackjack-3D/releases/tag/release].
 
 ## Key Features
